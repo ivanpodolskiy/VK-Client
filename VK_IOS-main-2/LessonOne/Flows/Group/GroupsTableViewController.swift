@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 
 class GroupsTableViewController: UITableViewController {
+   
     let groupService = GroupsAPI()
     var gorupModel: [GroupsModel] = []
     let ref = Database.database().reference(withPath: "group")
@@ -18,6 +19,7 @@ class GroupsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
         groupService.getGroups { [weak self] groups in
             guard let self = self else {return}
             self.gorupModel = groups

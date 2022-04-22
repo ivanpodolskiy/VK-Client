@@ -9,16 +9,26 @@ import UIKit
 
 class SearchGroupsTableViewController: UITableViewController {
     
-    let searchGropsService = SearchGropsAPI()
+    let searchGropsService = SearchGroupService()
     var searchGroups: [SearchGropsJSON] = []
+    
+   
+    
+    @IBOutlet weak var serchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        searchGropsService.searchGroups { group in
-            print ("получили группы из поиска в контроллере")
-            self.searchGroups = group
-            self.tableView.reloadData()
+        self.serchBar.delegate = self
+    }
+    
+    func preformsSarchRequest(searchText: String) {
+        if searchText != "" {
+            let searchGropServiceProxy = SearchGroupServiceProxy(searchGroupService: searchGropsService)
+            searchGropServiceProxy.getGroupFromRequest(searchRequest: searchText) { group in
+                    self.searchGroups = group
+                    self.tableView.reloadData()
+            }
         }
     }
     
@@ -37,5 +47,12 @@ class SearchGroupsTableViewController: UITableViewController {
         }
         cell.textLabel?.text = itmeSeachGroups.name
         return cell
+    }
+}
+
+extension SearchGroupsTableViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.preformsSarchRequest(searchText: searchText)
     }
 }

@@ -11,9 +11,7 @@ import SwiftyJSON
 
 
 final class FriendsMakeAPIOperation: AsyncOperation {
-    
   var data: Data?
-    
     override func cancel() {
         request.cancel()
         super.cancel()
@@ -60,6 +58,7 @@ final class FriendsParcingOperation: AsyncOperation {
     }
 }
 
+
 final class FriendsDisplayOperations: AsyncOperation {
     
     var friendsViewController: FriendsOperationTableViewController
@@ -77,40 +76,41 @@ final class FriendsDisplayOperations: AsyncOperation {
     }
 }
 
-final class FriendsAPI {
-    
-    let baseUrl = "https://api.vk.com/method"
-    let token = Session.shared.token
-    let userID = Session.shared.userId
-    let version = "5.81"
-    
-    func getFriends(completion: @escaping([FriendsModel]) -> ()) {
-        
-        let method = "/friends.get"
-        
-        let parameters: Parameters = [
-            "user_id": userID,
-            "order": "name",
-            "fields": "photo_50",
-            "count": 1000,
-            "access_token": token,
-            "v": version
-        ]
-        
-        let url = baseUrl + method
-        AF.request(url, method: .get, parameters: parameters).responseJSON { response in
-            guard let data = response.data else { return}
-            debugPrint (response.data?.prettyJSON)
-            do {
-                let friendJSON = try JSON(data)["response"]["items"].rawData()
-                
-                let friends = try JSONDecoder().decode([FriendsModel].self, from: friendJSON)
-                completion(friends)
-                
-            } catch {
-                print(error)
-            }
-        }
-    }
-}
+//OLD
+//final class FriendsAPI {
+//
+//    let baseUrl = "https://api.vk.com/method"
+//    let token = Session.shared.token
+//    let userID = Session.shared.userId
+//    let version = "5.81"
+//
+//    func getFriends(completion: @escaping([FriendsModel]) -> ()) {
+//
+//        let method = "/friends.get"
+//
+//        let parameters: Parameters = [
+//            "user_id": userID,
+//            "order": "name",
+//            "fields": "photo_50",
+//            "count": 1000,
+//            "access_token": token,
+//            "v": version
+//        ]
+//
+//        let url = baseUrl + method
+//        AF.request(url, method: .get, parameters: parameters).responseJSON { response in
+//            guard let data = response.data else { return}
+//            debugPrint (response.data?.prettyJSON)
+//            do {
+//                let friendJSON = try JSON(data)["response"]["items"].rawData()
+//
+//                let friends = try JSONDecoder().decode([FriendsModel].self, from: friendJSON)
+//                completion(friends)
+//
+//            } catch {
+//                print(error)
+//            }
+//        }
+//    }
+//}
 

@@ -9,16 +9,20 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-final class SearchGropsAPI {
+protocol SearchGroupServiceInterface {
+    func getGroupFromRequest(searchRequest: String, completion: @escaping([SearchGropsJSON]) -> ())
+}
+
+final class SearchGroupService: SearchGroupServiceInterface {
     let baseUrl = "https://api.vk.com/method"
     let token = Session.shared.token
     let userID = Session.shared.userId
     let version = "5.81"
-    let searchRequest = "Music"
     
-    func searchGroups(completion: @escaping([SearchGropsJSON]) -> ()) {
+    
+    func getGroupFromRequest(searchRequest: String, completion: @escaping([SearchGropsJSON] ) -> ()) {
         let method = "/groups.search"
-        
+        let searchRequest = searchRequest
         let parametrs: Parameters = [
             "q":searchRequest,
             "access_token":token,
@@ -38,3 +42,18 @@ final class SearchGropsAPI {
         }
     }
 }
+
+class SearchGroupServiceProxy: SearchGroupServiceInterface {
+    let searchGroupService: SearchGroupService
+    
+    init(searchGroupService: SearchGroupService) {
+        self.searchGroupService = searchGroupService
+    }
+    
+    func getGroupFromRequest(searchRequest: String, completion: @escaping ([SearchGropsJSON]) -> ()) {
+        self.searchGroupService.getGroupFromRequest(searchRequest: searchRequest, completion: completion)
+        print ("called func getGroupsFromRequest with request: \(searchRequest)")
+    }
+}
+
+
