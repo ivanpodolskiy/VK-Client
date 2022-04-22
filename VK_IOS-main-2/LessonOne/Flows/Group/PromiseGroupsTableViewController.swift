@@ -11,10 +11,10 @@ import PromiseKit
 class PromiseGroupsTableViewController: UITableViewController {
     let groupService = GroupsAPI()
     var groupsModel: [GroupsModel] = []
-    
+
     override func viewDidLoad() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         super.viewDidLoad()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         getGroups()
     }
     
@@ -22,7 +22,7 @@ class PromiseGroupsTableViewController: UITableViewController {
         firstly {
             self.groupService.promiseGetGroup()
         }.ensure {
-    
+
         }.done { groups in
             self.groupsModel = groups
             print (groups)

@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-final class PhotoAPI{
+final class PhotoAPI {
     let baseUrl = "https://api.vk.com/method"
     let token = Session.shared.token
     let userID = Session.shared.userId
@@ -33,7 +33,7 @@ final class PhotoAPI{
         
         AF.request(url, method: .get, parameters: parametrs).responseJSON { response in
             guard let data = response.data else {return}
-            debugPrint(response.data?.prettyJSON)
+//            debugPrint(response.data?.prettyJSON)
             do {
                 let photoJSON = try JSON(data)["response"]["items"].rawData()
                 let photo = try JSONDecoder().decode([PhotoModel].self, from: photoJSON)
@@ -44,3 +44,4 @@ final class PhotoAPI{
         }
     }
 }
+
